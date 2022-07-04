@@ -1,0 +1,63 @@
+from optparse import Option
+from datetime import datetime, timedelta
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
+
+# options
+options = webdriver.ChromeOptions()
+#options.add_argument("download.default_directory=C:/Users/NebievNI/Desktop/pars/Selenium")
+prefs = {'download.default_directory' : 'C:\\Users\\NebievNI\\Desktop\\pars\\Selenium\\',
+         "download.prompt_for_download": False,
+        "download.directory_upgrade": True}
+options.add_experimental_option('prefs', prefs)
+
+
+
+driver = webdriver.Chrome(
+    executable_path="C:\\Users\\NebievNI\\Desktop\\pars\\Selenium\\chromedriver.exe",
+    options=options
+    
+)
+
+
+
+try:
+    user_name = "TAV6"
+    user_pasword = "123456"
+    date_format = '%d / %m / %Y'
+    yesterday = datetime.now() - timedelta(days=1)
+    driver.maximize_window()
+    driver.get("http://192.168.0.159:9080/Account/Login?ReturnUrl=%2fJournal%2fCovid8800%3fLength%3d9&Length=9")
+    #driver.get("https://github.com/login")
+    time.sleep(1)
+    driver.find_element("id", "UserName").send_keys(user_name)
+    time.sleep(1)
+    driver.find_element("id", "Password").send_keys(user_pasword)
+    time.sleep(1)
+    driver.find_element("id", "Password").send_keys(Keys.ENTER)
+    time.sleep(5)
+    driver.find_element("name", "beginDate").send_keys(Keys.BACKSPACE*20)
+    time.sleep(1)
+    driver.find_element("name", "beginDate").send_keys(yesterday.strftime(date_format))
+    time.sleep(1)
+    driver.find_element("name", "beginDate").send_keys(Keys.ENTER)
+    time.sleep(1)
+    driver.find_element("xpath", "//section/div/div/div[2]/form/div[1]/div/div[3]/button").click()
+    time.sleep(1)
+    driver.find_element("xpath", "//section/div/div/div[2]/form/div[1]/div/div[4]/button").click()
+    time.sleep(1)
+    
+    
+    
+    
+    
+    
+
+
+
+except Exception as ex:
+    print(ex)
+finally:
+    driver.close()
+    driver.quit()
