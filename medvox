@@ -1,56 +1,60 @@
-from optparse import Option
 from datetime import datetime, timedelta
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 
+
 # options
 options = webdriver.ChromeOptions()
-#options.add_argument("download.default_directory=C:/Users/NebievNI/Desktop/pars/Selenium")
+options.add_argument("--headless") # Скрыть работу скрипта
 prefs = {'download.default_directory' : 'C:\\Users\\NebievNI\\Desktop\\pars\\Selenium\\',
          "download.prompt_for_download": False,
-        "download.directory_upgrade": True}
+         "download.directory_upgrade": True}
 options.add_experimental_option('prefs', prefs)
 
 
 
 driver = webdriver.Chrome(
     executable_path="C:\\Users\\NebievNI\\Desktop\\pars\\Selenium\\chromedriver.exe",
-    options=options
-    
+    options=options    
 )
-
 
 
 try:
     user_name = "TAV6"
     user_pasword = "123456"
+    url = "http://192.168.0.159:9080/Account/Login?ReturnUrl=%2fJournal%2fCovid8800%3fLength%3d9&Length=9"
     date_format = '%d / %m / %Y'
     yesterday = datetime.now() - timedelta(days=1)
     driver.maximize_window()
-    driver.get("http://192.168.0.159:9080/Account/Login?ReturnUrl=%2fJournal%2fCovid8800%3fLength%3d9&Length=9")
+    driver.get(url)
+    print("Перехожу по ссылке...")
     #driver.get("https://github.com/login")
     time.sleep(1)
     driver.find_element("id", "UserName").send_keys(user_name)
+    print("Указываю логин...")
     time.sleep(1)
     driver.find_element("id", "Password").send_keys(user_pasword)
+    print("Указываю пароль...")
     time.sleep(1)
     driver.find_element("id", "Password").send_keys(Keys.ENTER)
+    print("Прохожу авторизацию...")
     time.sleep(5)
     driver.find_element("name", "beginDate").send_keys(Keys.BACKSPACE*20)
+    print("Указываю дату...")
     time.sleep(1)
     driver.find_element("name", "beginDate").send_keys(yesterday.strftime(date_format))
+    print("Собираю статистику...")
     time.sleep(1)
     driver.find_element("name", "beginDate").send_keys(Keys.ENTER)
+    print("      ")
     time.sleep(1)
     driver.find_element("xpath", "//section/div/div/div[2]/form/div[1]/div/div[3]/button").click()
+    print("Скичиваю файл...")
     time.sleep(1)
     driver.find_element("xpath", "//section/div/div/div[2]/form/div[1]/div/div[4]/button").click()
-    time.sleep(1)
-    
-    
-    
-    
+    time.sleep(1)     
+    print ("Файл скачан")  
     
     
 
